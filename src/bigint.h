@@ -1,26 +1,41 @@
+#pragma once
+
 #include <ostream>
+#include <string>
 #include <vector>
-typedef long long ll;
 class BigInt {
 private:
-  std::vector<ll> digits;
+  bool negative;
+  std::vector<unsigned int> digits; // little-endian
 
 public:
-  BigInt(ll n);
+  BigInt(long long n = 0, bool negative = false);
+  BigInt(std::vector<unsigned int> digits, bool negative = false);
+  BigInt(std::string s);
 
-  BigInt operator+(const BigInt &other);
-  BigInt operator-(const BigInt &other);
-  BigInt operator*(const BigInt &other);
-  BigInt operator/(const BigInt &other);
+  void normalize();
+  BigInt operator-() const;
 
-  BigInt operator+=(const BigInt &other);
-  BigInt operator-=(const BigInt &other);
-  BigInt operator*=(const BigInt &other);
-  BigInt operator/=(const BigInt &other);
+  BigInt divmod(const BigInt &other, BigInt &remainder) const;
 
-  bool operator<(const BigInt &other);
-  bool operator>(const BigInt &other);
-  bool operator==(const BigInt &other);
-  bool operator<=(const BigInt &other);
-  bool operator>=(const BigInt &other);
+  BigInt operator+(const BigInt &other) const;
+  BigInt operator-(const BigInt &other) const;
+  BigInt operator*(const BigInt &other) const;
+  BigInt operator/(const BigInt &other) const;
+  BigInt operator%(const BigInt &other) const;
+
+  BigInt &operator+=(const BigInt &other);
+  BigInt &operator-=(const BigInt &other);
+  BigInt &operator*=(const BigInt &other);
+  BigInt &operator/=(const BigInt &other);
+
+  bool operator==(const BigInt &other) const;
+  bool operator!=(const BigInt &other) const;
+  bool operator<(const BigInt &other) const;
+  bool operator>(const BigInt &other) const;
+  bool operator<=(const BigInt &other) const;
+  bool operator>=(const BigInt &other) const;
+
+  friend std::ostream &operator<<(std::ostream &os, const BigInt &bi);
+  friend BigInt abs(BigInt bigint);
 };
