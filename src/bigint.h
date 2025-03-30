@@ -23,11 +23,16 @@ public:
   BigInt operator*(const BigInt &other) const;
   BigInt operator/(const BigInt &other) const;
   BigInt operator%(const BigInt &other) const;
+  BigInt operator>>(int shift) const;
+  BigInt operator<<(int shift) const;
 
   BigInt &operator+=(const BigInt &other);
   BigInt &operator-=(const BigInt &other);
   BigInt &operator*=(const BigInt &other);
   BigInt &operator/=(const BigInt &other);
+  BigInt &operator%=(const BigInt &other);
+  BigInt &operator>>=(int shift);
+  BigInt &operator<<=(int shift);
 
   bool operator==(const BigInt &other) const;
   bool operator!=(const BigInt &other) const;

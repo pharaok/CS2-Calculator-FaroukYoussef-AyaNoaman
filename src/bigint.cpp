@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <climits>
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <ostream>
@@ -80,17 +81,18 @@ BigInt BigInt::operator-(const BigInt &other) const {
 }
 BigInt BigInt::operator*(const BigInt &other) const {
   vector<unsigned int> ds;
+
   for (int i = 0; i < digits.size(); i++) {
     for (int j = 0; j < other.digits.size(); j++) {
       if (i + j >= ds.size())
         ds.push_back(0);
-      ds[i + j] += digits[i] * other.digits[j];
-      if (1ull * digits[i] * other.digits[i] >
-          numeric_limits<unsigned int>::max()) // carry
-      {
+      unsigned long long tmp =
+          static_cast<unsigned long long>(digits[i]) * other.digits[j];
+      ds[i + j] += tmp & numeric_limits<unsigned int>::max();
+      if (tmp >> 32) {
         if (i + j + 1 >= ds.size())
           ds.push_back(0);
-        ds[i + j + 1] += (1ull * digits[i] * other.digits[j]) >> 32;
+        ds[i + j + 1] += tmp >> 32;
       }
     }
   }
@@ -98,14 +100,21 @@ BigInt BigInt::operator*(const BigInt &other) const {
   return BigInt(ds, negative != other.negative);
 }
 BigInt BigInt::divmod(const BigInt &other, BigInt &remainder) const {
-  // WARN: lol
-  BigInt quotient;
-  remainder = *this;
-  while (remainder >= other) {
-    remainder -= other;
-    quotient += 1;
+  // binary long division
+  remainder = 0;
+  BigInt quotient, dividend = abs(*this), divisor = abs(other);
+  quotient.digits.resize(digits.size());
+  for (int i = digits.size() * 32 - 1; i >= 0; i--) {
+    remainder <<= 1;
+    remainder.digits[0] |= (dividend.digits[i / 32] >> (i % 32)) & 1;
+    if (remainder >= divisor) {
+      remainder -= divisor;
+      quotient.digits[i / 32] |= 1 << (i % 32);
+    }
   }
 
+  quotient.negative = negative != other.negative;
+  remainder.negative = negative;
   return quotient;
 }
 BigInt BigInt::operator/(const BigInt &other) const {
@@ -116,6 +125,35 @@ BigInt BigInt::operator%(const BigInt &other) const {
   BigInt remainder;
   divmod(other, remainder);
   return remainder;
+}
+BigInt BigInt::operator>>(int shift) const {
+  int wordShift = shift / 32;
+  shift %= 32;
+  BigInt res = *this;
+  res.digits.erase(res.digits.begin(), res.digits.begin() + wordShift);
+  if (shift) {
+    for (int i = 0; i < res.digits.size(); i++) {
+      res.digits[i] >>= shift;
+      if (i + 1 < res.digits.size())
+        res.digits[i] |= (res.digits[i + 1] & ((1 << shift) - 1))
+                         << (32 - shift);
+    }
+  }
+  return res;
+}
+BigInt BigInt::operator<<(int shift) const {
+  int wordShift = shift / 32;
+  shift %= 32;
+  BigInt res = *this;
+  res.digits.insert(res.digits.begin(), wordShift, 0);
+  if (shift) {
+    for (int i = res.digits.size() - 1; i >= 0; i--) {
+      res.digits[i] <<= shift;
+      if (i > 0)
+        res.digits[i] |= res.digits[i - 1] >> (32 - shift);
+    }
+  }
+  return res;
 }
 
 BigInt &BigInt::operator+=(const BigInt &other) {
@@ -130,6 +168,11 @@ BigInt &BigInt::operator*=(const BigInt &other) {
 BigInt &BigInt::operator/=(const BigInt &other) {
   return (*this = *this / other);
 }
+BigInt &BigInt::operator%=(const BigInt &other) {
+  return (*this = *this % other);
+}
+BigInt &BigInt::operator>>=(int shift) { return (*this = *this >> shift); }
+BigInt &BigInt::operator<<=(int shift) { return (*this = *this << shift); }
 
 bool BigInt::operator==(const BigInt &other) const {
   if (negative != other.negative)
@@ -167,12 +210,19 @@ bool BigInt::operator<=(const BigInt &other) const { return !(*this > other); }
 bool BigInt::operator>=(const BigInt &other) const { return !(*this < other); }
 
 ostream &operator<<(ostream &os, const BigInt &bi) {
-  string digits;
   BigInt tmp, rem;
-  for (tmp = abs(bi).divmod(1e9, rem); tmp > 0; tmp = tmp.divmod(1e9, rem))
-    digits = to_string(rem.digits[0]) + digits;
-  if (rem.digits[0] > 0)
-    digits = to_string(rem.digits[0]) + digits;
+  string digits;
+
+  for (tmp = abs(bi).divmod(1e9, rem); tmp > 0; tmp = tmp.divmod(1e9, rem)) {
+    stringstream ss;
+    ss << setw(9) << setfill('0') << rem.digits[0];
+    digits = ss.str() + digits;
+  }
+  if (rem.digits[0] != 0) {
+    stringstream ss;
+    ss << rem.digits[0];
+    digits = ss.str() + digits;
+  }
 
   if (bi.negative)
     os << '-';
