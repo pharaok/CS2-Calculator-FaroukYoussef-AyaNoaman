@@ -236,3 +236,12 @@ BigInt BigInt::factorial(BigInt n) {
     res *= i;
   return res;
 }
+BigInt BigInt::gcd(BigInt a, BigInt b) {
+  while (b != 0) {
+    BigInt tmp = b;
+    b = a % b;
+    a = tmp;
+  }
+  return a;
+}
+BigInt BigInt::lcm(BigInt a, BigInt b) { return abs(a * b) / gcd(a, b); }

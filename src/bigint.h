@@ -46,4 +46,6 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const BigInt &bi);
   friend BigInt abs(BigInt bigint);
   static BigInt factorial(BigInt n);
+  static BigInt gcd(BigInt a, BigInt b);
+  static BigInt lcm(BigInt a, BigInt b);
 };
