@@ -1,4 +1,4 @@
 build/
-parser
-p
-.dSYM/
+/parser
+/p
+parser.dSYM/
