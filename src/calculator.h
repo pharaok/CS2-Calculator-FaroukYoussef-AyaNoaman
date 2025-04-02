@@ -135,9 +135,9 @@ T gcd(T a, T b) {
 }
 
 
-template<typename T>
-T lcm(T a, T b) {
-    T a2 = a, b2 = b;
+// template<typename T>
+long long lcm(long long a, long long b) {
+    long long a2 = a, b2 = b;
 
     while (a2 != b2) {
         a2 > b2 ? b2 += b : a2 += a;
