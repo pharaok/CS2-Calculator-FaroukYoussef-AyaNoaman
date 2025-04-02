@@ -2,40 +2,41 @@
 #include <type_traits>
 #include "calculator.h"
 
+typedef long long ll;
 
 template<typename T>
-T add(const T& a, const T& b) {
+T add(T a, T b) {
     return a+b;
 }
 
 
 template<typename T>
-T sub(const T& a, const T& b) {
+T sub(T a, T b) {
     return a-b;
 }
 
 
 template<typename T>
-T mult(const T& a, const T& b) {
+T mult(T a, T b) {
     return a*b;
 }
 
 
 template<typename T>
-T div(const T& a, const T& b) {
+T div(T a, T b) {
     return a/b;
 }
 
 
 ////////////////////////////////////////////
-bigint fact(const int16_t& a) {
+ll fact(int16_t a) {
     if (a == 0) {
         return 1;
     } else if (a < 0) {
         return -1;
     }
 
-    bigint answer = 1;
+    ll answer = 1;
     for (; a>0; --a) {
         answer *= a;
     }
@@ -43,14 +44,14 @@ bigint fact(const int16_t& a) {
     return answer;
 }
 
-bigint fact(const uint16_t& a) {
+ll fact(uint16_t a) {
     if (a == 0) {
         return 1;
     } else if (a < 0) {
         return -1;
     }
 
-    bigint answer = 1;
+    ll answer = 1;
     for (; a>0; --a) {
         answer *= a;
     }
@@ -58,14 +59,14 @@ bigint fact(const uint16_t& a) {
     return answer;
 }
 
-bigint fact(const int32_t& a) {
+ll fact(int32_t a) {
     if (a == 0) {
         return 1;
     } else if (a < 0) {
         return -1;
     }
 
-    bigint answer = 1;
+    ll answer = 1;
     for (; a>0; --a) {
         answer *= a;
     }
@@ -73,14 +74,14 @@ bigint fact(const int32_t& a) {
     return answer;
 }
 
-bigint fact(const uint32_t& a) {
+ll fact(uint32_t a) {
     if (a == 0) {
         return 1;
     } else if (a < 0) {
         return -1;
     }
 
-    bigint answer = 1;
+    ll answer = 1;
     for (; a>0; --a) {
         answer *= a;
     }
@@ -88,14 +89,14 @@ bigint fact(const uint32_t& a) {
     return answer;
 }
 
-bigint fact(const int64_t& a) {
+ll fact(int64_t a) {
     if (a == 0) {
         return 1;
     } else if (a < 0) {
         return -1;
     }
 
-    bigint answer = 1;
+    ll answer = 1;
     for (; a>0; --a) {
         answer *= a;
     }
@@ -103,14 +104,14 @@ bigint fact(const int64_t& a) {
     return answer;
 }
 
-bigint fact(const uint64_t& a) {
+ll fact(uint64_t a) {
     if (a == 0) {
         return 1;
     } else if (a < 0) {
         return -1;
     }
 
-    bigint answer = 1;
+    ll answer = 1;
     for (; a>0; --a) {
         answer *= a;
     }
@@ -121,14 +122,14 @@ bigint fact(const uint64_t& a) {
 
 
 template<typename T>
-T gcd(const T& a, const T& b) {
-    return a == 0 ? b;
+T gcd(T a, T b) {
+    if (a == 0) return b;
     return b == 0 ? a : gcd(b, a % b);
 }
 
 
 template<typename T>
-T lcm(const T& a, const T& b) {
+T lcm(T a, T b) {
     T a2 = a, b2 = b;
 
     while (a2 != b2) {
@@ -157,4 +158,4 @@ T lcm(const T& a, const T& b) {
 //     std::uniform_real_distribution<T> distr(a, b);
 
 //     return T(distr(gen));
-}
+// }
