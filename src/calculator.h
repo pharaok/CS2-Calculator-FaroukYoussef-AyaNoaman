@@ -3,144 +3,145 @@
 #include "bigint.h"
 using std::is_integral;
 
+namespace calculator {
+    typedef long long ll;
 
-typedef long long ll;
-
-// Header function declarations
-template<typename T> T add(T, T);
-template<typename T> T sub(T, T);
-template<typename T> T mult(T, T);
-template<typename T> T div(T, T);
-ll fact(ll);
-ll gcd(ll, ll);
-ll lcm(ll, ll);
-template<typename T> T rand(T, T);
-
-
-template<typename T>
-T add(T a, T b) {
-    /**
-     * Addition function:
-     * Takes two numeric inputs of the same type
-     * Outputs their sum
-     */
-    return a+b;
-}
+    // Header function declarations
+    template<typename T> T add(T, T);
+    template<typename T> T sub(T, T);
+    template<typename T> T mult(T, T);
+    template<typename T> T div(T, T);
+    ll fact(ll);
+    ll gcd(ll, ll);
+    ll lcm(ll, ll);
+    template<typename T> T rand(T, T);
 
 
-template<typename T>
-T sub(T a, T b) {
-    /**
-     * Subtraction function
-     * Takes any two numeric inputs of the same type
-     * Outputs their difference
-     */
-    return a-b;
-}
-
-
-template<typename T>
-T mult(T a, T b) {
-    /**
-     * Multiplication function
-     * Takes any two numeric inputs of the same type
-     * Outputs their product
-     */
-    return a*b;
-}
-
-
-template<typename T>
-T div(T a, T b) {
-    /**
-     * Division function
-     * Takes any two numeric inputs of the same type
-     * Outputs their quotient
-     */
-    return a/b;
-}
-
-
-ll fact(ll a) {
-    /**
-     * Factorial function
-     * Takes an integer type of any length and converts it to long long
-     * Outputs the factorial (multplication of all number from 1 to a)
-     */
-    if (a == 0) {
-        return 1;
-    } else if (a < 0) {
-        return -1;
+    template<typename T>
+    T add(T a, T b) {
+        /**
+         * Addition function:
+         * Takes two numeric inputs of the same type
+         * Outputs their sum
+         */
+        return a+b;
     }
 
-    ll answer = 1;
-    for (; a>0; --a) {
-        answer *= a;
+
+    template<typename T>
+    T sub(T a, T b) {
+        /**
+         * Subtraction function
+         * Takes any two numeric inputs of the same type
+         * Outputs their difference
+         */
+        return a-b;
     }
 
-    return answer;
-}
 
-
-BigInt fact(BigInt a) {
-    return BigInt::factorial(a);
-}
-
-
-ll gcd(ll a, ll b) {
-    /**
-     * Greatest Common Divisor (Largest Common Factor) function
-     * Takes any two integer types of any length and converts them to long long
-     * Outputs the greatest integer that divides both numbers without a remainder
-     */
-    if (a == 0) return b;
-    return b == 0 ? a : gcd(b, a % b);
-}
-
-
-BigInt gcd(BigInt a, BigInt b) {
-    return BigInt::gcd(a, b);
-}
-
-
-ll lcm(ll a, ll b) {
-    /**
-     * Least Common Multiple function
-     * Takes any two integer types of any length and converts them to long long
-     * Outputs the smallest integer that is a multiple of both numbers
-     */
-    ll a2 = a, b2 = b;
-
-    while (a2 != b2) {
-        a2 > b2 ? b2 += b : a2 += a;
+    template<typename T>
+    T mult(T a, T b) {
+        /**
+         * Multiplication function
+         * Takes any two numeric inputs of the same type
+         * Outputs their product
+         */
+        return a*b;
     }
 
-    return a2;
-}
+
+    template<typename T>
+    T div(T a, T b) {
+        /**
+         * Division function
+         * Takes any two numeric inputs of the same type
+         * Outputs their quotient
+         */
+        return a/b;
+    }
 
 
-BigInt lcm(BigInt a, BigInt b) {
-    return BigInt::lcm(a, b);
-}
+    ll fact(ll a) {
+        /**
+         * Factorial function
+         * Takes an integer type of any length and converts it to long long
+         * Outputs the factorial (multplication of all number from 1 to a)
+         */
+        if (a == 0) {
+            return 1;
+        } else if (a < 0) {
+            return -1;
+        }
+
+        ll answer = 1;
+        for (; a>0; --a) {
+            answer *= a;
+        }
+
+        return answer;
+    }
 
 
-template <typename T>
-T rand(T a, T b) {
-    /**
-     * Random Number Generator function
-     * Takes any two numeric inputs of the same type
-     * Outputs a random number from the range [a, b]
-     */
+    BigInt fact(BigInt a) {
+        return BigInt::factorial(a);
+    }
 
-    if constexpr (is_integral<T>) {
-        std::default_random_engine generator;
-        std::uniform_int_distribution<T> distribution(a, b);
-        return distribution(generator);
-    } else if (std::is_same<T, BigInt>::value) {
-        return BigInt::randomRange(a, b);
-    } else {
-        std::default_random_engine generator;
-        std::uniform_real_distribution<T> distribution(a, b);
-        return distribution(generator);
+
+    ll gcd(ll a, ll b) {
+        /**
+         * Greatest Common Divisor (Largest Common Factor) function
+         * Takes any two integer types of any length and converts them to long long
+         * Outputs the greatest integer that divides both numbers without a remainder
+         */
+        if (a == 0) return b;
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+
+    BigInt gcd(BigInt a, BigInt b) {
+        return BigInt::gcd(a, b);
+    }
+
+
+    ll lcm(ll a, ll b) {
+        /**
+         * Least Common Multiple function
+         * Takes any two integer types of any length and converts them to long long
+         * Outputs the smallest integer that is a multiple of both numbers
+         */
+        ll a2 = a, b2 = b;
+
+        while (a2 != b2) {
+            a2 > b2 ? b2 += b : a2 += a;
+        }
+
+        return a2;
+    }
+
+
+    BigInt lcm(BigInt a, BigInt b) {
+        return BigInt::lcm(a, b);
+    }
+
+
+    template <typename T>
+    T rand(T a, T b) {
+        /**
+         * Random Number Generator function
+         * Takes any two numeric inputs of the same type
+         * Outputs a random number from the range [a, b]
+         */
+
+        if constexpr (is_integral<T>::is_integral) {
+            std::default_random_engine generator;
+            std::uniform_int_distribution<T> distribution(a, b);
+            return distribution(generator);
+        } else if (std::is_same<T, BigInt>::value) {
+            return BigInt::randomRange(a, b);
+        } else {
+            std::default_random_engine generator;
+            std::uniform_real_distribution<T> distribution(a, b);
+            return distribution(generator);
+        }
     }
 }
