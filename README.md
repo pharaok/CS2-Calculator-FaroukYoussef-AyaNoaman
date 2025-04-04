@@ -14,7 +14,26 @@ make
 
 ## Documentation
 
-### BigInt library
+### Parser Program
+
+You can input any common mathematical expression (numbers only, no variables) and it will be interpreted by the program.
+You may use common arithmetic, brackets, and all functions from the Calculator library below.
+
+Example:
+`5 * 4 - 2lcm(2, 3)*4!` will output `-268`.
+
+### Calculator Library
+
+Features:
+
+- [x] Basic arithmetic (addition, subtraction, multiplication, division)
+- [x] Factorial (integer types only)
+- [x] Greatest common divisor (integer types only)
+- [x] Least common multiple (integer types only)
+- [x] Random number generator
+- [x] Incorporated BigInt class (infinite integers) described below
+
+### BigInt Library
 
 Arbitrary size integer library.
 Implemented as a vector of unsigned 32-bit integer representing base 2^32 digits in little-endian order
