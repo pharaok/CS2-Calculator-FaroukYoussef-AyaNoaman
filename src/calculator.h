@@ -1,5 +1,6 @@
 #pragma once
 #include <random>
+#include "bigint.h"
 using std::is_integral;
 
 
@@ -25,7 +26,6 @@ T add(T a, T b) {
      */
     return a+b;
 }
-
 
 
 template<typename T>
@@ -82,6 +82,11 @@ ll fact(ll a) {
 }
 
 
+BigInt fact(BigInt a) {
+    return BigInt::factorial(a);
+}
+
+
 ll gcd(ll a, ll b) {
     /**
      * Greatest Common Divisor (Largest Common Factor) function
@@ -92,6 +97,10 @@ ll gcd(ll a, ll b) {
     return b == 0 ? a : gcd(b, a % b);
 }
 
+
+BigInt gcd(BigInt a, BigInt b) {
+    return BigInt::gcd(a, b);
+}
 
 
 ll lcm(ll a, ll b) {
@@ -110,6 +119,11 @@ ll lcm(ll a, ll b) {
 }
 
 
+BigInt lcm(BigInt a, BigInt b) {
+    return BigInt::lcm(a, b);
+}
+
+
 template <typename T>
 T rand(T a, T b) {
     /**
@@ -117,10 +131,13 @@ T rand(T a, T b) {
      * Takes any two numeric inputs of the same type
      * Outputs a random number from the range [a, b]
      */
+
     if constexpr (is_integral<T>) {
         std::default_random_engine generator;
         std::uniform_int_distribution<T> distribution(a, b);
         return distribution(generator);
+    } else if (std::is_same<T, BigInt>::value) {
+        return BigInt::randomRange(a, b);
     } else {
         std::default_random_engine generator;
         std::uniform_real_distribution<T> distribution(a, b);
