@@ -1,4 +1,6 @@
 #pragma once
+#include <random>
+using std::is_integral;
 
 
 typedef long long ll;
@@ -17,8 +19,8 @@ template<typename T> T rand(T, T);
 template<typename T>
 T add(T a, T b) {
     /**
-     * Addition function
-     * Takes any two numeric inputs of the same type
+     * Addition function:
+     * Takes two numeric inputs of the same type
      * Outputs their sum
      */
     return a+b;
@@ -115,4 +117,13 @@ T rand(T a, T b) {
      * Takes any two numeric inputs of the same type
      * Outputs a random number from the range [a, b]
      */
+    if constexpr (is_integral<T>) {
+        std::default_random_engine generator;
+        std::uniform_int_distribution<T> distribution(a, b);
+        return distribution(generator);
+    } else {
+        std::default_random_engine generator;
+        std::uniform_real_distribution<T> distribution(a, b);
+        return distribution(generator);
+    }
 }
