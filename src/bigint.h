@@ -8,13 +8,14 @@ private:
   bool negative;
   std::vector<unsigned int> digits; // little-endian
   void addWithCarry(int i, unsigned long long carry);
-  void subWithBorrow(int i, unsigned long long borrow);
+  void subWithBorrow(int i, long long borrow);
 
 public:
   BigInt(long long n = 0, bool negative = false);
   BigInt(std::vector<unsigned int> digits, bool negative = false);
   BigInt(std::string s);
 
+  int bitLength();
   void normalize();
   BigInt operator-() const;
 
@@ -48,4 +49,7 @@ public:
   static BigInt factorial(BigInt n);
   static BigInt gcd(BigInt a, BigInt b);
   static BigInt lcm(BigInt a, BigInt b);
+  static BigInt pow(BigInt base, BigInt exp);
+  static BigInt randomBits(int bits);
+  static BigInt randomRange(BigInt min, BigInt max);
 };

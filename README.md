@@ -15,17 +15,20 @@ make
 ## Documentation
 
 ### BigInt library
-Arbitrary size integer library. 
-Implemented as a vector of unsigned 32-bit integer representing base 2^32 digits in little-endian order 
+
+Arbitrary size integer library.
+Implemented as a vector of unsigned 32-bit integer representing base 2^32 digits in little-endian order
 (least significant digit is placed at the smallest index).
 
 Features:
-- [x] Arbitrary size integers
-- [x] Basic arithmetic operations (+, -, *, /, %)
-- [x] String and integer constructors
-- [x] Factorial, GCD, and LCM functions
-- [ ] Fast division algorithm such as Knuth's Algorithm D 
 
+- [x] Arbitrary size integers
+- [x] Basic arithmetic operations (+, -, \*, /, %)
+- [x] Comparison operators (==, !=, <, >, <=, >=)
+- [x] String and integer constructors
+- [x] Factorial, power, GCD, and LCM functions
+- [x] Random number generation
+- [ ] Fast division algorithm such as Knuth's Algorithm D
 
 ## Contributors
 

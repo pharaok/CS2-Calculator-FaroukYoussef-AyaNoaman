@@ -1,6 +1,8 @@
 #include "bigint.h"
 #include <cmath>
 #include <iomanip>
+#include <limits>
+#include <random>
 #include <string>
 
 using namespace std;
@@ -33,23 +35,29 @@ void BigInt::normalize() {
 }
 BigInt BigInt::operator-() const { return BigInt(digits, !negative); }
 
+int BigInt::bitLength() {
+  normalize();
+  int len = digits.size() * 32 + 32;
+  int i;
+  for (i = digits.size() - 1; i > 0 && digits[i] == 0; i--)
+    len -= 32;
+  for (unsigned int d = digits[i]; d; d >>= 1)
+    len--;
+  return len;
+}
 void BigInt::addWithCarry(int i, unsigned long long c) {
   if (c == 0)
     return;
-  if (i >= digits.size())
-    digits.resize(i + 1);
   c += digits[i];
   digits[i] = c;
   addWithCarry(i + 1, c >> 32);
 }
-void BigInt::subWithBorrow(int i, unsigned long long b) {
+void BigInt::subWithBorrow(int i, long long b) {
   if (b == 0)
     return;
-  if (i >= digits.size())
-    digits.resize(i + 1);
   b = digits[i] - b;
   digits[i] = b;
-  subWithBorrow(i + 1, b >> 32);
+  subWithBorrow(i + 1, -(b >> 32));
 }
 
 BigInt BigInt::operator+(const BigInt &other) const {
@@ -66,7 +74,7 @@ BigInt BigInt::operator+(const BigInt &other) const {
 }
 BigInt BigInt::operator-(const BigInt &other) const {
   if (negative != other.negative)
-    return *this + -other;
+    return *this + (-other);
   if (abs(*this) < abs(other))
     return -(other - *this);
 
@@ -79,8 +87,8 @@ BigInt BigInt::operator-(const BigInt &other) const {
   return diff;
 }
 BigInt BigInt::operator*(const BigInt &other) const {
-  BigInt prod(vector<unsigned int>(digits.size() + other.digits.size(), 0));
-
+  BigInt prod;
+  prod.digits.resize(digits.size() + other.digits.size() + 1);
   for (int i = 0; i < digits.size(); i++) {
     for (int j = 0; j < other.digits.size(); j++) {
       unsigned long long tmp =
@@ -98,7 +106,7 @@ BigInt BigInt::divmod(const BigInt &divisor, BigInt &remainder) const {
 
   remainder = 0;
   BigInt quotient;
-  quotient.digits.resize(digits.size() + 4);
+  quotient.digits.resize(digits.size());
   for (int i = (digits.size() * 32) - 1; i >= 0; i--) {
     remainder <<= 1;
     remainder.digits[0] |= (digits[i / 32] >> (i % 32)) & 1;
@@ -245,3 +253,38 @@ BigInt BigInt::gcd(BigInt a, BigInt b) {
   return a;
 }
 BigInt BigInt::lcm(BigInt a, BigInt b) { return abs(a * b) / gcd(a, b); }
+BigInt BigInt::pow(BigInt base, BigInt exp) {
+  BigInt res = 1;
+  while (exp > 0) {
+    if (exp % 2 == 1)
+      res *= base;
+    base *= base;
+    exp >>= 1;
+  }
+  return res;
+}
+BigInt BigInt::randomBits(int bits) {
+  std::mt19937 rng(std::random_device{}());
+  BigInt res;
+  res.digits.resize(bits / 32 + 1);
+  for (int i = 0; i < bits / 32; i++)
+    res.digits[i] = uniform_int_distribution<unsigned int>(
+        0, numeric_limits<unsigned int>::max())(rng);
+  res.digits[bits / 32] =
+      uniform_int_distribution<unsigned int>(0, (1 << (bits % 32)) - 1)(rng);
+  return res;
+}
+BigInt BigInt::randomRange(BigInt min, BigInt max) {
+  // rejection sampling
+  BigInt range = max - min;
+  if (range <= numeric_limits<unsigned int>::max()) {
+    std::mt19937 rng(std::random_device{}());
+    return min +
+           uniform_int_distribution<unsigned int>(0, range.digits[0])(rng);
+  }
+  BigInt r;
+  do {
+    r = randomBits(range.bitLength());
+  } while (r > range);
+  return r + min;
+}

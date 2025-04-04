@@ -2,6 +2,7 @@
 #include "cassert"
 #include <climits>
 #include <iostream>
+#include <ostream>
 
 int main() {
   assert(BigInt(2) + BigInt(2) == BigInt(4));
@@ -28,6 +29,14 @@ int main() {
          BigInt("93326215443944152681699238856266700490715968264381621468592963"
                 "89521759999322991560894146397615651828625369792082722375825118"
                 "5210916864000000000000000000000000"));
+  assert(
+      BigInt::factorial(50) - BigInt::factorial(20) ==
+      BigInt(
+          "30414093201713378043612608166064768844377641566527609991823360000"));
+  assert(BigInt::pow(7, 100) ==
+         BigInt("32344765096247579913446477691002168108572031989046254009338953"
+                "31391691459636928060001"));
+  std::cout << "All bigint passed." << std::endl;
 
   std::cout << "All tests passed." << std::endl;
   return 0;
