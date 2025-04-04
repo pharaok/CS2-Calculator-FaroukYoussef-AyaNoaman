@@ -1,7 +1,5 @@
 #pragma once
 #include <string>
-using std::string;
 
-
-string parseBrackets(string);
-long double compute(string);
+std::string parseBrackets(std::string);
+long double compute(std::string);

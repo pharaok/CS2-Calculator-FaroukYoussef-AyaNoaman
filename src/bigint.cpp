@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <limits>
 #include <random>
+#include <sstream>
 #include <string>
 
 using namespace std;

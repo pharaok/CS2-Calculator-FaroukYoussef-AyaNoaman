@@ -1,7 +1,8 @@
 #include <iostream>
 #include "parser.h"
 #include "calculator.h"
-using std::cin, std::cout, std::to_string;
+using std::cin, std::cout, std::to_string, std::string;
+using namespace calculator;
 
 // typedef long double ld;
 
